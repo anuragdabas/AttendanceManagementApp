@@ -5,3 +5,4 @@ flask-wtf
 flask-migrate
 python-dotenv
 python-dateutil
+email_validator

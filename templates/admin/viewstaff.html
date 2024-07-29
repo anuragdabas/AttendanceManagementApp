@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Staff Dashboard{% endblock %}
+{% block content %}
+  <div class="bg-image h-100" style="background-color: #f5f7fa;">
+    <div class="mask d-flex align-items-center h-100">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body p-0">
+                <div class="table-responsive table-scroll" data-mdb-perfect-scrollbar="true" style="position: relative; height: 700px">
+                  <table class="table table-striped mb-0">
+                    <thead style="background-color: #002d72;">
+                      <tr>
+                        <th scope="col">Role</th>
+                        <th scope="col">Registration Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">DOB</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Mobile No</th>
+                        <th scope="col">Alternate Mobile No</th>
+                        <th scope="col">Password</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Pincode</th>
+                        <th scope="col">City</th>
+                        <th scope="col">Aadhar</th>
+                        <th scope="col">Registration Date</th>
+                        <th scope="col">Picture</th>
+                        <th scope="col">Updated At</th>
+                        <th scope="col">Schedule</th>
+                        <th scope="col">Time Logs</th>
+                        <th scope="col">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for member in staff %}
+                      <tr>
+                        {% if member['is_manager'] %}
+                            <td>Manager</td>
+                        {% else %}
+                            <td>Employee</td>
+                        {% endif %}
+                        <td>{{ member['registration_id'] | safe}}</td>
+                        <td>{{ member['name'] | safe}}</td>
+                        <td>{{ member['email'] | safe}}</td>
+                        <td>{{ member['dob'] | safe}}</td>
+                        <td>{{ member['gender'] | safe}}</td>
+                        <td>{{ member['mobile'] | safe}}</td>
+                        <td>{{ member['alternate_mobile'] | safe}}</td>
+                        <td>{{ member['password'] | safe}}</td>
+                        <td>{{ member['address'] | safe}}</td>
+                        <td>{{ member['pincode'] | safe}}</td>
+                        <td>{{ member['city'] | safe}}</td>
+                        <td>{{ member['aadhar'] | safe}}</td>
+                        <td>{{ member['registration_date'] | safe}}</td>
+                        <td>{{ member['picture'] | safe}}</td>
+                        <td>{{ member['updated_at'] | safe}}</td>
+                        <td>NA</td>
+                        <td>NA</td>
+                        <td>
+                            <form method="POST" action = "{{ url_for('admin.viewstaff') }}">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                <input type="hidden" name="_method" value="PUT">
+                                <input type="hidden" name="id" value = "{{ member['id'] }}" />
+                                <input class="btn btn-primary btn-sm mr-1" type = "submit" value="Edit" />
+                            </form>
+                            <form method="POST" action = "{{ url_for('admin.viewstaff') }}">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="id" value = "{{ member['id'] }}" />
+                                <input class="btn btn-danger btn-sm" type = "submit" value="Delete" />
+                            </form>
+                        </td>    
+                      </tr>
+                    {% endfor % }
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -57,3 +57,51 @@ body, html {
     border-color: #5369f8;
     color: #fff;
 }
+
+/*Dashboard tables*/
+
+.intro {
+    height: 100%;
+  }
+  
+  table td,
+  table th {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  thead th {
+    color: #fff;
+  }
+  
+  .card {
+    border-radius: .5rem;
+  }
+  
+  .table-scroll {
+    border-radius: .5rem;
+  }
+  
+  .table-scroll table thead th {
+    font-size: 1.25rem;
+  }
+  thead {
+    top: 0;
+    position: sticky;
+  }
+
+
+/*ADD/EDIT Staff*/
+
+.btnRegister {
+    display: block; /* Ensures button takes full width */
+    margin: 10px auto; /* Center button */
+    border: none;
+    border-radius: 1.5rem;
+    padding: 10px 20px;
+    background: #0062cc;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+}

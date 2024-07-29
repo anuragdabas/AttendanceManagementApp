@@ -45,7 +45,7 @@ class StaffModel(db.Model, UserMixin):
     updated_at = db.Column(db.DateTime, nullable = False, default = datetime.now(UTC))
     is_manager = db.Column(db.Boolean, nullable = False, default = False)
     schedule = db.relationship('ScheduleModel', backref='staff', lazy=True, cascade="all,delete" , passive_deletes=True)
-    timelogs = db.relationship('OffDayModel', backref='staff', lazy=True, cascade="all,delete" , passive_deletes=True, uselist = True)
+    timelogs = db.relationship('TimeLogModel', backref='staff', lazy=True, cascade="all,delete" , passive_deletes=True, uselist = True)
 
 
     @classmethod
@@ -55,9 +55,10 @@ class StaffModel(db.Model, UserMixin):
             logger.info("Attempting to add staff in TimeScale")
             requiredargs = ["name","registration_id","aadhar","password","dob","gender","email","mobile", "role", "address", "city", "pincode"]
             BaseUtil.perform_argument_check(data = kwargs,requiredargs = requiredargs, callback_name = "StaffModel.add_staff")
+            kwargs["is_manager"] = (kwargs.pop("role", None)=="Manager")
 
-            kwargs["picture"] = FilesModel.add_file(file = kwargs.get("picture"), bucket = "images")
-            kwargs["resume"] = FilesModel.add_file(file = kwargs.get("resume"), bucket = "documents")
+            if bool(kwargs.pop("picture",None)):
+                kwargs["picture"] = FilesModel.add_file(file = kwargs.get("picture"), bucket = "images")
             
             cols = cls.__table__.columns.keys()
             staff = cls(**ModelUtil.parse_kwargs(kwargs, cols))
@@ -119,6 +120,9 @@ class StaffModel(db.Model, UserMixin):
 
             if bool(kwargs.pop("picture",None)):
                 kwargs["picture"] = FilesModel.add_file(file = kwargs["picture"], bucket = "images")
+
+            if bool(kwargs.get("role")):
+                kwargs["is_manager"] = (kwargs.pop("role")=="Manager")
 
             for param in kwargs:
                 if hasattr(staff,param):
