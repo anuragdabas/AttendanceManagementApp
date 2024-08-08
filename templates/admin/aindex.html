@@ -1,0 +1,14 @@
+{% extends "basewithnav.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="col-sm py-4 my-4">
+        <div class="list-group">
+            <a href="{{ url_for('admin.viewstaff') }}"
+                class="list-group-item list-group-item-action list-group-item-light">Employee Dashboard</a>
+            <a href="{{ url_for('admin.viewschedule') }}"
+                class="list-group-item list-group-item-action list-group-item-light">Schedule Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

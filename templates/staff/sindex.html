@@ -1,0 +1,23 @@
+{% extends "basewithnav.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="col-sm py-4 my-4">
+        {% if current_user.is_manager %}
+            <div class="list-group">
+                <a href="{{ url_for('admin.viewstaff') }}"
+                    class="list-group-item list-group-item-action list-group-item-light">Employee Dashboard</a>
+                <a href="{{ url_for('admin.viewschedule') }}"
+                    class="list-group-item list-group-item-action list-group-item-light">Schedule Dashboard</a>
+                    <a href="{{ url_for('staff.addtimelog') }}"
+                    class="list-group-item list-group-item-action list-group-item-light">Add TimeLog</a>
+            </div>
+        {% else %}
+            <div class="list-group">
+                <a href="{{ url_for('staff.addtimelog') }}"
+                    class="list-group-item list-group-item-action list-group-item-light">Add TimeLog</a>
+            </div>
+        {% endif %}       
+    </div>
+</div>
+{% endblock %}

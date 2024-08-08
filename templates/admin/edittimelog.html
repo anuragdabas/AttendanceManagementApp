@@ -1,0 +1,46 @@
+{% extends "basewithnav.html" %}
+{% block title %}Staff TimeLog{% endblock %}
+{% block content %}
+
+<div class="container mt-5">
+    <h2 class="text-center">Employee Time Logging</h2>
+    <form method="post" action="{{ url_for('admin.viewtimelogs', id = staff_id) }}">
+        <div class="row register-form">
+            {{ form.hidden_tag() }}
+            {{ form.id() }}
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form.clock_in.label() }}
+                    {{ form.clock_in(class="form-control") }}
+                    <div class="error-feedback">
+                        {% if form.clock_in.errors %}
+                            {{ form.clock_in.errors[0] }}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{ form.picture.label() }}
+                    {{ form.picture(class = "form-control") }}
+                    <div class="error-feedback">
+                        {% if form.picture.errors %}
+                            {{ form.picture.errors[0] }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form.clock_out.label() }}
+                    {{ form.clock_out(class = "form-control") }}
+                    <div class="error-feedback">
+                        {% if form.clock_out.errors %}
+                            {{ form.clock_out.errors[0] }}
+                        {% endif %}
+                    </div>
+                </div>
+                {{ form.submit(class="btnRegister") }}
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

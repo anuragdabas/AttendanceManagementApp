@@ -1,0 +1,72 @@
+{% extends "basewithnav.html" %}
+{% block title %}Add Staff{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center w-100 py-4 my-4">
+        <div class="col-xl-10">
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <h3 class="register-heading">Schedule Information</h3>
+                    <form method="post" action="{{ url_for('admin.addschedule') }}">
+                        <div class="row register-form">
+                            {{ form.hidden_tag() }}
+                            {{ form.id() }}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.name.label() }}
+                                    {{ form.name(class="form-control") }}
+                                    <div class="error-feedback">
+                                        {% if form.name.errors %}
+                                            {{ form.name.errors[0] }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    {{ form.shift_type.label() }}
+                                    {{ form.shift_type(class = "form-control") }}
+                                    <div class="error-feedback">
+                                        {% if form.shift_type.errors %}
+                                            {{ form.shift_type.errors[0] }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    {{ form.dayoffs.label() }}
+                                    {{ form.dayoffs(class = "form-control") }}
+                                    <div class="error-feedback">
+                                        {% if form.dayoffs.errors %}
+                                            {{ form.dayoffs.errors[0] }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.shift_start.label() }}
+                                    {{ form.shift_start(class = "form-control") }}
+                                    <div class="error-feedback">
+                                        {% if form.shift_start.errors %}
+                                            {{ form.shift_start.errors[0] }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    {{ form.shift_ends.label() }}
+                                    {{ form.shift_ends(class = "form-control") }}
+                                    <div class="error-feedback">
+                                        {% if form.shift_ends.errors %}
+                                            {{ form.shift_ends.errors[0] }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {{ form.submit(class="btnRegister") }}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

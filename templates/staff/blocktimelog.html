@@ -1,0 +1,22 @@
+{% extends "basewithnav.html" %}
+{% block title %}Staff TimeLog{% endblock %}
+{% block content %}
+
+<div class="container mt-5">
+    <h2 class="text-center">Employee Time Logging</h2>
+    <form>
+        <div class="form-group">
+            <div id="clockInTime" class="time-display"></div>
+            <div id="clockOutTime" class="time-display"></div>
+            <div id="clockNote">Time Logging Disabled Due To The One Of The Following Reason:<br /> 
+                                - You Already Supressed The Extension of 1 Hour As Per Your Assigned Schedule<br />
+                                - Your Shift Is Not Started Yet</div>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-success btn-clock", id="clockInBtn" disabled>Clock In</button>
+            <button class="btn btn-danger btn-clock", id="clockOutBtn" disabled>Clock Out</button>
+        </div>
+        <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Submit</button>
+    </form>
+</div>
+{% endblock %}

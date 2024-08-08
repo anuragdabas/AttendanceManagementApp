@@ -1,0 +1,154 @@
+{% extends "basewithnav.html" %}
+{% block title %}Staff TimeLog{% endblock %}
+{% block content %}
+
+<div class="container mt-5">
+    <h2 class="text-center">Employee Time Logging</h2>
+    <form id="timeForm" method="post">
+        {{ form.hidden_tag() }}
+        {{ form.id() }}
+        <div class="form-group">
+            <div id="clockInTime" class="time-display"></div>
+            <div id="clockOutTime" class="time-display"></div>
+            <div id="clockNote"></div>
+        </div>
+        <div class="form-group">
+            {{ form.clock_in(class="btn btn-success btn-clock", id="clockInBtn", value="Clock In") }}
+            {{ form.clock_out(class="btn btn-danger btn-clock", id="clockOutBtn", value="Clock Out") }}
+            <div class="error-feedback">
+                {% if form.clock_in.errors %}
+                    {{ form.clock_in.errors[0] }}
+                {% endif %}
+                {% if form.clock_out.errors %}
+                    {{ form.clock_out.errors[0] }}
+                {% endif %}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Submit</button>
+    </form>
+</div>
+<video id="video" width="640" height="480" autoplay style="display: none;"></video>
+<canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
+
+<script>
+    function formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0'); // 24-hour format
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+
+
+    $(document).ready(function() {
+        const clockInBtn = $('#clockInBtn');
+        const clockOutBtn = $('#clockOutBtn');
+        const submitBtn = $('#submitBtn');
+        const clockInTime = $('#clockInTime');
+        const clockOutTime = $('#clockOutTime');
+        const clockNote = $('#clockNote');
+        const video = $('#video')[0];
+        const canvas = $('#canvas')[0];
+        const ctx = canvas.getContext('2d');
+
+        let clockInTimestamp = '{{ clock_in_time | default("None") }}';
+        let clockOutTimestamp = '{{ clock_out_time | default("None") }}';
+        let photo;
+
+        console.log('Initial clockInTimestamp:', clockInTimestamp);
+        console.log('Initial clockOutTimestamp:', clockOutTimestamp);
+
+        // Initial button state logic
+        if (clockInTimestamp !== 'None' && clockInTimestamp !== '') {
+            clockInTime.text(`Clock In Time: ${new Date(clockInTimestamp).toLocaleTimeString()}`);
+            clockInBtn.prop('disabled', true);
+            clockOutBtn.prop('disabled', false);
+
+            if (clockOutTimestamp !== 'None' && clockOutTimestamp !== '') {
+                clockOutTime.text(`Clock Out Time: ${new Date(clockOutTimestamp).toLocaleTimeString()}`);
+                clockOutBtn.prop('disabled', true);
+                submitBtn.prop('disabled', true);
+            }
+        } else {
+            clockInBtn.prop('disabled', false);
+            clockOutBtn.prop('disabled', true);
+        }
+
+        clockInBtn.on('click', function() {
+            const now = new Date();
+            clockInTimestamp = formatDate(now);
+            clockInTime.text(`Clock In Time: ${now.toLocaleTimeString()}`);
+            clockNote.text("Allow Camera permission and then proceed to submit otherwise you won't be able to submit the clock-in");
+            clockInBtn.prop('disabled', true);
+            clockOutBtn.prop('disabled', false);
+
+            // Start video stream
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.srcObject = stream;
+                    video.play();
+
+                    // Capture photo after a short delay to allow webcam feed to initialize
+                    setTimeout(() => {
+                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                        photo = canvas.toDataURL('image/png');
+                        video.srcObject.getTracks().forEach(track => track.stop());
+                        console.log("Photo captured");
+                        // Enable submit button after photo capture
+                        submitBtn.prop('disabled', false);
+                    }, 2000); // 2 seconds delay
+                })
+                .catch(err => {
+                    console.error("Error accessing webcam: " + err);
+                });
+        });
+
+        clockOutBtn.on('click', function() {
+            const now = new Date();
+            clockOutTimestamp = formatDate(now);
+            clockOutTime.text(`Clock Out Time: ${now.toLocaleTimeString()}`);
+            clockNote.text("Press submit to proceed otherwise you won't be able to submit the clock-out");
+            clockOutBtn.prop('disabled', true);
+            submitBtn.prop('disabled', false);
+        });
+
+        $('#timeForm').submit(function(event) {
+            event.preventDefault();
+
+            const formData = new FormData();
+            formData.append('clock_in', clockInTimestamp);
+            formData.append('clock_out', clockOutTimestamp);
+            formData.append('picture', photo);
+            formData.append('csrf_token', $('input[name="csrf_token"]').val());
+
+            $.ajax({
+                url: "{{ url_for('staff.addtimelog') }}",
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    // console.log('Success:', data);
+                    // alert(`Data submitted successfully: ${JSON.stringify(data)}`);
+                    console.log('Success');
+                    alert("Data submitted successfully");
+                    window.location.href = "{{ url_for('staff.staffindex') }}"
+                    $('#timeForm')[0].reset();
+                    clockInTime.text('');
+                    clockOutTime.text('');
+                    clockInBtn.prop('disabled', false);
+                    clockOutBtn.prop('disabled', true);
+                    submitBtn.prop('disabled', true);
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                    alert('Error submitting data');
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

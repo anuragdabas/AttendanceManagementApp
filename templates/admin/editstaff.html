@@ -6,8 +6,8 @@
         <div class="col-xl-10">
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                    <h3 class="register-heading">Employee Information</h3>
-                    <form method="post" action="{{ url_for('admin.addstaff') }}" enctype="multipart/form-data">
+                    <h3 class="register-heading">Edit Employee Information</h3>
+                    <form method="post" action="{{ url_for('admin.viewstaff') }}" enctype="multipart/form-data">
                         <div class="row register-form">
                             {{ form.hidden_tag() }}
                             {{ form.id() }}
@@ -167,4 +167,5 @@
         </div>
     </div>
 </div>
+
 {% endblock %}

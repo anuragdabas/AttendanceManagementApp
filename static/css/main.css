@@ -6,6 +6,18 @@ body, html {
     background: #f6f9fc;
 }
 
+.container-fluid {
+  width: 100%;
+  max-width: 100%;
+  padding: 0 15px;
+}
+h1, h2, h3, h4, h5, h6 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-bottom: 10px;
+}
+
 #main-wrapper {
     height: 100%;
 }
@@ -60,36 +72,60 @@ body, html {
 
 /*Dashboard tables*/
 
-.intro {
-    height: 100%;
-  }
-  
-  table td,
-  table th {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-  
-  thead th {
-    color: #fff;
-  }
-  
-  .card {
-    border-radius: .5rem;
-  }
-  
-  .table-scroll {
-    border-radius: .5rem;
-  }
-  
-  .table-scroll table thead th {
-    font-size: 1.25rem;
-  }
-  thead {
-    top: 0;
-    position: sticky;
-  }
+/* General Card Styling */
+.card {
+  border: none;
+  border-radius: 10px;
+}
+
+.card-header {
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
+  padding: 1rem 1.5rem;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+/* Table Styling */
+.table thead th {
+  background-color: #343a40;
+  color: #ffffff;
+  border-bottom: 2px solid #dee2e6;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.table tbody tr {
+  transition: all 0.3s ease;
+}
+
+.table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.table tbody td {
+  vertical-align: middle;
+}
+
+.table tbody td a {
+  color: #007bff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.table tbody td a:hover {
+  text-decoration: underline;
+}
+
+/* Button Styling */
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border-radius: 0.2rem;
+}
 
 
 /*ADD/EDIT Staff*/
@@ -104,4 +140,27 @@ body, html {
     color: #fff;
     font-weight: 600;
     cursor: pointer;
+    float: right;
+}
+
+
+/*Time Log*/
+
+.btn-clock {
+  margin-right: 10px;
+}
+.time-display {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+#video, #canvas {
+  display: none;
+}
+
+.error-feedback {
+  display: block;
+  width: 100%;
+  margin-top: .25rem;
+  font-size: 80%;
+  color: #dc3545;
 }

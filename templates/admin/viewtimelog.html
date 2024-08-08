@@ -1,0 +1,63 @@
+{% extends "basewithnav.html" %}
+{% block title %}Staff Dashboard{% endblock %}
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Employee Timelog</h4>
+                </div>
+                <div class="card-body table-responsive">
+                    <table class="table table-striped table-bordered w-100">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Clock-In</th>
+                                <th scope="col">Clock-Out</th>
+                                <th scope="col">Picture</th>
+                                <th scope="col">Updated At</th>
+                                {% if current_user.is_admin %}
+                                    <th scope="col">Actions</th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for timelog in timelogs %}
+                            <tr>
+                                <td>{{ timelog['id'] | safe}}</td>
+                                <td>{{ timelog['clock_in'] | safe}}</td>
+                                <td>{{ timelog['clock_out'] | safe}}</td>
+                                {% if timelog.get('picture') %}
+                                <td><a href="{{ timelog['picture'] | safe }}" target="_blank">{{ timelog['picture_name'] |
+                                        safe }}</a></td>
+                                {% else %}
+                                <td></td>
+                                {% endif %}
+                                <td>{{ timelog['updated_at'] | safe}}</td>
+                                {% if current_user.is_admin %}
+                                <td>
+                                    <form class="d-inline" method="POST" action="{{ url_for('admin.viewtimelogs', id = staff_id) }}">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                                        <input type="hidden" name="_method" value="PUT">
+                                        <input type="hidden" name="id" value="{{ timelog['id'] }}" />
+                                        <input class="btn btn-primary btn-sm mr-1" type="submit" value="Edit" />
+                                    </form>
+                                    <form class="d-inline" method="POST" action="{{ url_for('admin.viewtimelogs', id = staff_id) }}">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <input type="hidden" name="id" value="{{ timelog['id'] }}" />
+                                        <input class="btn btn-danger btn-sm" type="submit" value="Delete" />
+                                    </form>
+                                </td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

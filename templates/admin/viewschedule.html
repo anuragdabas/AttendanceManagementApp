@@ -1,0 +1,59 @@
+{% extends "basewithnav.html" %}
+{% block title %}Staff Dashboard{% endblock %}
+{% block content %}
+<div class="container-fluid mt-4">
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">Employee Schedules</h4>
+          <a href="{{ url_for('admin.addschedule') }}" class="btn btn-light btn-sm">
+            <i class="fa fa-plus-circle"></i> Add Schedule
+          </a>
+        </div>
+        <div class="card-body table-responsive">
+          <table class="table table-striped table-bordered w-100">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Shift Type</th>
+                <th scope="col">Shift Start</th>
+                <th scope="col">Shift End</th>
+                <th scope="col">Week Offs</th>
+                <th scope="col">Updated At</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for schedule in schedules %}
+              <tr>
+                <td>{{ schedule['name'] | safe}}</td>
+                <td>{{ schedule['shift_type'] | safe}}</td>
+                <td>{{ schedule['shift_start'] | safe}}</td>
+                <td>{{ schedule['shift_ends'] | safe}}</td>
+                <td>{{ ', '.join(schedule['dayoffs']) | safe}}</td>
+                <td>{{ schedule['updated_at'] | safe}}</td>
+                <td>
+                  <form class="d-inline" method="POST" action="{{ url_for('admin.viewschedule') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <input type="hidden" name="_method" value="PUT">
+                    <input type="hidden" name="id" value="{{ schedule['id'] }}"/>
+                    <button class="btn btn-primary btn-sm" type="submit">Edit</button>
+                  </form>
+                  <form class="d-inline" method="POST" action="{{ url_for('admin.viewschedule') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="id" value="{{ schedule['id'] }}"/>
+                    <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
