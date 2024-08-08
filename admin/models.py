@@ -571,6 +571,7 @@ class FilesModel(db.Model):
     @staticmethod
     def add_file(file, bucket, file_path=""):
         try:
+            minio.create_bucket(bucket)
             if not (isinstance(file, FileStorage) and bool(file)):
                 return
             

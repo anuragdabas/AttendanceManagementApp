@@ -131,7 +131,8 @@ class MinioDB:
         'cn-north-1', 'ap-southeast-1', 'ap-southeast-2',
         'ap-northeast-1', 'ap-northeast-2'
         """
-        self.minioClient.make_bucket(bucket_name, location='eu-central-1')
+        if not self.minioClient.bucket_exists(bucket_name):
+            self.minioClient.make_bucket(bucket_name, location='eu-central-1')
 
 
     def upload_file(self, bucket_name, object_name, file_path):

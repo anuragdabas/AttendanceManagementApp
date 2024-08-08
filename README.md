@@ -57,7 +57,7 @@ Endpoints                            Description
 
 /                                   # app index page
 admin/                              # admin index page (protected)
-staff/                              # staff index page
+staff/                              # staff index page (protected)
 admin/signin                        # admin signin page
 staff/signin                        # staff signin page
 admin/employee                      # view/edit/delete employee/staff dashboard (protected)
